@@ -1,96 +1,78 @@
 package com.interview.ryan;
 
-import java.util.Scanner;
-
 public class GameTic {
-
-	public static void main(String[] args) {
-		Scanner in = new Scanner(System.in);
-		int size;
-		int numOfX=0;
-		int numOfY=0;
-		System.out.println("Plase enter the game'sizes: ");
-		size=in.nextInt();//get size
-		String [][]game = new String [size][size];
-		boolean getResult = false;
-		System.out.println("Please enter your X or Y and the location, example X,2,2");
-		for(int i=0;i<game.length;i++) {
-			for(int k=0;k<game[i].length;k++) {
-				String input = in.next();
-				int x = Integer.parseInt(input.substring(2, 3));
-				int y = Integer.parseInt(input.substring(4, 5));
-				game[x][y]=input.substring(0, 1);
-			}
-		}
-		for(int i=0;i<game.length;i++) {
-			if(game[i][i].equals("X")) {
-				numOfX++;
-			}
-			else {
-				numOfY++;
-			}
-			if(numOfX==size || numOfY==size) {
-				getResult=true;
-			}
-		}
-		if(!getResult) {
-			numOfX=0;
-			numOfY=0;
-			for(int i=0;i<game.length;i++) {
-				if(game[i][size-1-i].equals("X")) {
-					numOfX++;
-				}
-				else {
-					numOfY++;
-				}
-				if(numOfX==size || numOfY==size) {
-					getResult=true;
-				}
-			}
-		}
-		if(!getResult) {
-			for(int i=0;i<game.length;i++) {
-				numOfX=0;
-				numOfY=0;
-				for(int k=0;k<game[i].length;k++) {
-					if(game[i][k].equals("X"))
-						numOfX++;
-					else
-						numOfY++;
-				}
-				if(numOfX==size || numOfY==size) {
-					getResult=true;
-					break;
-				}
-			}
-		}
-		if(!getResult) {
-			for(int i=0;i<size;i++) {
-				numOfX=0;
-				numOfY=0;
-				for(int k=0;k<size;k++) {
-					if(game[k][i].equals("X"))
-						numOfX++;
-					else
-						numOfY++;
-				}
-				if(numOfX==size || numOfY==size) {
-					getResult=true;
-					break;
-				}
-			}
-		}
-		if(getResult) {
-			if(numOfX==size) {
-				System.out.println("X win this game!");
-			}
-			else {
-				System.out.println("Y win this game!");
-			}
-		}
-		else {
-			System.out.println("draw!");
-		}
-		
-	}
+	 
+    int[][] matrix;
+ 
+    /** Initialize your data structure here. */
+    public GameTic(int n) {
+        matrix = new int[n][n];
+    }
+ 
+    /** Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+    public int move(int row, int col, int player) {
+        matrix[row][col]=player;
+ 
+        //check row
+        boolean win=true;
+        for(int i=0; i<matrix.length; i++){
+            if(matrix[row][i]!=player){
+                win=false;
+                break;
+            }
+        }
+ 
+        if(win) return player;
+ 
+        //check column
+        win=true;
+        for(int i=0; i<matrix.length; i++){
+            if(matrix[i][col]!=player){
+                win=false;
+                break;
+            }
+        }
+ 
+        if(win) return player;
+ 
+        //check back diagonal
+        win=true;
+        for(int i=0; i<matrix.length; i++){
+            if(matrix[i][i]!=player){
+                win=false;
+                break;
+            }
+        }
+ 
+        if(win) return player;
+ 
+        //check forward diagonal
+        win=true;
+        for(int i=0; i<matrix.length; i++){
+            if(matrix[i][matrix.length-i-1]!=player){
+                win=false;
+                break;
+            }
+        }
+ 
+        if(win) return player;
+ 
+        return 0;
+    }
+    
+    public static void main(String[] args) {
+    	GameTic tic = new GameTic(3);
+    	System.out.println(tic.move(0, 0, 1));
+    	System.out.println(tic.move(1, 0, 2));
+    	System.out.println(tic.move(0, 1, 1));
+    	System.out.println(tic.move(1, 1, 2));
+    	System.out.println(tic.move(0, 2, 1));
+    }
 }
